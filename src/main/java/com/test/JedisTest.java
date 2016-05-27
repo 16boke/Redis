@@ -17,7 +17,7 @@ import com.utils.JedisUtil;
 public class JedisTest {
 
 	private static final String ipAddr = "192.168.16.233";
-	private static final int port = 6381;
+	private static final int port = 6382;
 	private static Jedis jedis = null;
 
 	@BeforeClass
@@ -218,7 +218,14 @@ public class JedisTest {
 		map.put("key5", 0.2);
 		System.out.println(jedis.zadd("zset", 3, "key1"));
 		System.out.println(jedis.zadd("zset", map));
+		map.put("key6", 0.1);
+		System.out.println(jedis.zadd("zset1", map));
 		System.out.println("zset中的所有元素：" + jedis.zrange("zset", 0, -1));
+		System.out.println("zset1中的所有元素：" + jedis.zrange("zset1", 0, -1));
+		String dstkey = "";
+		jedis.zinterstore(dstkey, "zset", "zset1");
+		System.out.println("zset和zset1的交集元素：" + jedis.zrange(dstkey, 0, -1));
+
 		System.out.println("zset中的所有元素：" + jedis.zrangeWithScores("zset", 0, -1));
 		System.out.println("zset中的所有元素：" + jedis.zrangeByScore("zset", 0, 100));
 		System.out.println("zset中的所有元素：" + jedis.zrangeByScoreWithScores("zset", 0, 100));
